@@ -10,7 +10,7 @@ My interests are in cloud solutions, data workflows, systems design and architec
 
 ## My tech stack
 
-`Python`, `Go`, `JavaScript`, `TypeScript`, `React`, `HTML`, `CSS`, `Google Cloud Platform`, `SQL`, `Git`, `Docker`
+`Python`, `Go`, `JavaScript`, `TypeScript`, `React`, `HTML`, `CSS`, `Google Cloud Platform`, `SQL`, `Git`, `Docker` et cetera.
 
 ## Credits
 
