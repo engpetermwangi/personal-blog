@@ -3,7 +3,7 @@ layout: ../layouts/AboutLayout.astro
 title: "About"
 ---
 
-I am a Software Engineer based in Nairobi, Kenya. I build applications for the web, primarily as a full-stack developer.
+I am Peter Mwangi, a Software Engineer based in Nairobi, Kenya. I build applications for the web, primarily as a full-stack developer.
 My interests are in cloud solutions, data workflows, systems design and architecture.
 
 [Complete resume](/assets/resume.pdf)
