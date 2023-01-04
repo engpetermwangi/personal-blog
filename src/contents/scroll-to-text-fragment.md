@@ -3,7 +3,7 @@ author: Peter Mwangi
 datetime: 2023-01-01T10:10:11Z
 title: Scroll to text fragment
 slug: scroll-to-text-fragment
-featured: true
+featured: false
 draft: false
 tags:
   - browsers

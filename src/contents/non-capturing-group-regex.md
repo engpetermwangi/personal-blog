@@ -3,7 +3,7 @@ author: Peter Mwangi
 datetime: 2023-01-02T12:05:01Z
 title: Non-capturing groups in regex
 slug: non-capturing-group-regex
-featured: true
+featured: false
 draft: false
 tags:
   - regex
