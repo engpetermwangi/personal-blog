@@ -8,6 +8,7 @@ draft: false
 tags:
   - remix
   - cloud run
+  - docker
 ogImage: ""
 description: How to deploy a Remix app to Cloud Run in Google Cloud using Docker
 ---

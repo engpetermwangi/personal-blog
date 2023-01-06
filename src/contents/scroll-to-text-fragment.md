@@ -16,5 +16,5 @@ When you visit [KICC's Wikipedia page](https://en.wikipedia.org/wiki/Kenyatta_In
 Recently, Google Search has been returning some search results with such encoded links. It also works out well when you are sharing a link to particular text fragment. Try it out!
 
 <aside>
-⚠️ Currently not supported in Firefox.
+❗️Currently not supported in Firefox.
 </aside>
