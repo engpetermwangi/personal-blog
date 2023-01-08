@@ -41,32 +41,32 @@ service cloud.firestore {
 ## Setup
 
 1. Navigate to a new project directory and run `npm init -y`.
-2. Run `firebase login` to login to Firebase using your Google account. Allow the required permissions to let the Firebase CLI to access the Firebase project resources.
+2. Run `firebase login` to login to Firebase using your Google account. Allow the required permissions to let the Firebase CLI access the Firebase project resources.
 3. Run `firebase projects:create YOUR_UNIQUE_PROJECT_ID`
-4. Navigate to your [Firebase project's Firestore page](https://console.firebase.google.com/project/YOUR_UNIQUE_PROJECT_ID/firestore) and create a database to start using the Firestore service. When prompted to choose security rules for the database, choose `Start in production mode`,this makes the data private so that mobile and web clients will not be able to read or write to the database. We will update this behavior in a moment. Choose a location for your database that is nearest to your users. Go to `Project settings > General` and set the Default GCP resource location to the same location you picked for the service and save.
-5. Back in your terminal, run `firebase init`, select Firestore and Emulators features, associate the Firebase project it to the existing project created in the previous step. Leave Firestore rules and index files with default names. Select Authentication and Firestore emulators as the emulators to be set up and use the default ports for the same. You may also want to enable the Emulator UI and to download the emulators now rather than later when running them. Check-out the _firebase-related_ files created for the new Firebase app configuration.
-6. Install `jest` and `@firebase-rules-unit-testing` library by running `npm install -D jest @firebase/rules-unit-testing`. We will be using these two to test. Any other testing library can be used.
+4. Navigate to your [Firebase project's Firestore page](https://console.firebase.google.com/project/YOUR_UNIQUE_PROJECT_ID/firestore) and create a database in order to start using the Firestore service. When prompted to choose security rules for the database, choose `Start in production mode`,this makes the data private so that mobile and web clients will not be able to read or write to the database. We will update this behavior in a moment. Choose a location for your database that is nearest to your users. Go to `Project settings > General` on the Firebase console and set the Default GCP resource location to the same location you picked for the database and save.
+5. Back in your terminal, run `firebase init`, select both Firestore and Emulator features, associate the project to the existing project created in the previous step. Leave Firestore rules and index files with the default names. Select Authentication and Firestore emulators as the emulators to be set up and use the default ports for the same. You may also want to enable the Emulator UI and to download the emulators now rather than later. Check-out the firebase-related files created for the new Firebase app.
+6. Install `jest` and `@firebase-rules-unit-testing` as dev-dependencies by running `npm install -D jest @firebase/rules-unit-testing`. We will be using these two to test. You may use any other JavaScript testing library.
 
 ## About the app
 
-We will assume(but not implement) an app that stores user profiles in a `/users` Firestore collection. Each document in the collection, i.e `/users/{userId}` has a `userId` that is the same as an authenticated user’s unique `uid`.
+We will assume(but not implement) an app that stores user profiles in a `/users` Firestore collection. We only need to test the interaction with Firestore, specifically through the Firestore emulator. Each document in the collection, i.e `/users/{userId}` has a `userId` that is the same as an authenticated user’s unique `uid`.
 
 ## Let’s write the tests
 
 `firestore.rules.test.js`
 
 ```jsx
-import {
-  initializeTestEnvironment,
-  assertSucceeds,
-  assertFails,
-} from "@firebase/rules-unit-testing";
-import { getDoc, doc, setDoc } from "@firebase/firestore";
+const testing = require("@firebase/rules-unit-testing");
+const { initializeTestEnvironment, assertSucceeds, assertFails } = testing;
+const { getDoc, doc, setDoc, setLogLevel } = require("@firebase/firestore");
 
 const PROJECT_ID = "YOUR_UNIQUE_PROJECT_ID";
 const FIRESTORE_EMULATOR_HOST = "localhost";
 const FIRESTORE_EMULATOR_PORT = 8080;
 
+/**
+ * @type testing.RulesTestEnvironment
+ */
 let env;
 
 beforeAll(async () => {
@@ -74,6 +74,7 @@ beforeAll(async () => {
     projectId: PROJECT_ID,
     firestore: { host: FIRESTORE_EMULATOR_HOST, port: FIRESTORE_EMULATOR_PORT },
   });
+  setLogLevel("error");
 });
 
 afterEach(async () => {
@@ -84,24 +85,25 @@ afterAll(async () => {
   await env.cleanup();
 });
 
-test("user profile can be read by anyone, authenticated or not", async () => {
+test("public user profile can be read by anyone, authenticated or not", async () => {
   const db = env.unauthenticatedContext().firestore();
   await assertSucceeds(getDoc(doc(db, "users/foo")));
 });
 
-test("user profile can only be updated by authenticated user updating own profile", async () => {
+test("public user profile can only be updated by authenticated user updating own profile", async () => {
   const USER_ID = "user123";
+  const ANOTHER_USER_ID = "user12345";
   const db = env.authenticatedContext(USER_ID).firestore();
   await assertSucceeds(
     setDoc(doc(db, `users/${USER_ID}`), { name: "New Name" })
   );
   await assertFails(
-    setDoc(doc(db, `users/anotherUserId`), { name: "Yet Another Name" })
+    setDoc(doc(db, `users/${ANOTHER_USER_ID}`), { name: "Yet Another Name" })
   );
 });
 ```
 
-Update `package.json` to allow the use of ES6 import syntax and for Jest to watch all file changes while running the tests.
+Update `package.json` so as to use the jest command to run tests.
 
 ```json
 {
@@ -109,9 +111,8 @@ Update `package.json` to allow the use of ES6 import syntax and for Jest to watc
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type": "module",
   "scripts": {
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watchAll"
+    "test": "jest"
   },
   "keywords": [],
   "author": "Peter Mwangi",
@@ -152,7 +153,7 @@ The tests should now pass ✅
 
 ## Refactor the `firestore.rules`
 
-Conditions can get complicated really fast. Functions help refactor conditions making it easy to combine them with ease, to achieve tighter controls and for long-term maintainability. We can refactor `isSignedIn` and `isUsersOwnProfile` as functions like so:
+Conditions described in allow statements can get really complicated really fast in real applications. Functions help refactor conditions making it easy to combine them with ease, to achieve tighter controls and for long-term maintainability. We can refactor the above conditions into `isSignedIn()` and `isUsersOwnProfile(userId)` functions like so:
 
 ```
 rules_version = '2';
@@ -177,7 +178,7 @@ service cloud.firestore {
 
 ## That's it!
 
-`Ctrl-C` to stop the tests and do the same for the Firebase emulators.
+Run `Ctrl-C` to stop the tests, and the Firebase emulators too.
 
 👨‍💻️ Checkout the full code on [GitHub](https://github.com/engpetermwangi/testing-firestore-security-rules)!
 
