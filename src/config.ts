@@ -4,7 +4,7 @@ export const SITE = {
   website: "https:/petermwangi.me/",
   author: "Peter Mwangi",
   desc: "Peter Mwangi's personal blog: Musings of a software engineer.",
-  title: "engpetermwangi",
+  title: "Peter Mwangi's personal blog: Musings of a software engineer.",
   ogImage: "astropaper-og.jpg",
   lightAndDarkMode: true,
   postPerPage: 3,
