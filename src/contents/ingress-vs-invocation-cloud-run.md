@@ -1,7 +1,7 @@
 ---
 author: Peter Mwangi
 datetime: 2023-01-28T12:22:54Z
-title: Ingress vs invocation settings in Cloud Run - what’s the difference?
+title: Ingress vs invocation settings in Cloud Run
 slug: ingress-vs-invocation-cloud-run
 featured: true
 draft: false
