@@ -3,7 +3,7 @@ author: Peter Mwangi
 datetime: 2023-01-03T18:48:01Z
 title: How to deploy a Remix app to Cloud Run using Docker
 slug: remix-to-cloud-run
-featured: true
+featured: false
 draft: false
 tags:
   - remix

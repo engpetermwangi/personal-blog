@@ -3,7 +3,7 @@ author: Peter Mwangi
 datetime: 2023-01-06T05:39:10Z
 title: Running Firebase emulator in Docker
 slug: firebase-emulator-in-docker
-featured: true
+featured: false
 draft: false
 tags:
   - docker
