@@ -7,7 +7,7 @@ export const SITE = {
   title: "engpetermwangi",
   ogImage: "astropaper-og.jpg",
   lightAndDarkMode: true,
-  postPerPage: 3,
+  postPerPage: 5,
 };
 
 export const SOCIALS: SocialObjects = [
