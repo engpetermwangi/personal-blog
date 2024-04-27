@@ -3,7 +3,7 @@ author: Peter Mwangi
 datetime: 2023-01-08T15:49:34Z
 title: Testing Firestore security rules
 slug: testing-firestore-security-rules
-featured: true
+featured: false
 draft: false
 tags:
   - firebase
